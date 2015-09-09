@@ -5,14 +5,14 @@
 #include <omp.h>
 
 
-#define STEP_LIMIT 330
+#define STEP_LIMIT 220 
 
 int main(int argc, char* argv[]) {
     mpz_class x = 0, y, steps = 0,init;
     
     init.set_str(argv[1],10);
 
-    #pragma omp parallel for
+    #pragma omp parallel for shared(init) private(x,y,steps)
     for (int i=0; i<1000000; i++) {
         x = i+init;
         std::string x_str = x.get_str();
@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
             x_str = x.get_str();
             std::reverse(x_str.begin(), x_str.end());
         }
-        if (steps<STEP_LIMIT+1 && steps>50) std::cout<<i<<","<<steps<<std::endl;
+        if (steps<STEP_LIMIT+1 && steps>70) std::cout<<i+init<<","<<steps<<std::endl;
     }
 
     return 0;

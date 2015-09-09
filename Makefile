@@ -1,13 +1,17 @@
 CC=g++
 DEBUG=-g
-CFLAGS=-c L/usr/local/lib -lgmpxx -lgmp $(DEBUG)
-LFLAGS= -L/usr/local/lib -lgmpxx -lgmp $(DEBUG)
-OBJS= lychrel-num.o 
+CFLAGS=-c -Wall -L/usr/local/lib -fopenmp -lgmpxx -lgmp $(DEBUG)
+LFLAGS= -Wall -L/usr/local/lib -fopenmp -lgmpxx -lgmp $(DEBUG)
+OBJS= findchain.o 
 
 all: $(OBJS)
-	$(CC) $(LFLAGS) $(OBJS) -o findchain 
+	$(CC) $(OBJS) -o findchain $(LFLAGS)
 
 .cpp.o:
 	$(CC) $(CFLAGS) $*.cpp
 
-lychrel-num.o: lychrel-num.cpp 
+findchain.o: findchain.cpp
+
+clean:
+	rm findchain $(OBJS)
+	rm .*.swp
