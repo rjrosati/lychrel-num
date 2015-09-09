@@ -5,7 +5,7 @@
 #include <omp.h>
 
 
-#define STEP_LIMIT 220 
+#define STEP_LIMIT 270 
 
 int main(int argc, char* argv[]) {
     mpz_class x = 0, y, steps = 0,init;
@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
             x_str = x.get_str();
             std::reverse(x_str.begin(), x_str.end());
         }
-        if (steps<STEP_LIMIT+1 && steps>70) std::cout<<i+init<<","<<steps<<std::endl;
+        if (steps<STEP_LIMIT+1 && steps>100) std::cout<<i+init<<","<<steps<<std::endl;
     }
 
     return 0;
