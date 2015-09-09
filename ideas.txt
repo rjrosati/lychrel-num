@@ -1,0 +1,13 @@
+I might have to roll something custom to get great performance out of this thing...
+
+See https://gmplib.org/list-archives/gmp-discuss/2008-July/003343.html -- GMP is radix 2^k,
+  which is awesome for applications that don't require twiddling base-10 digits.
+Unfortunately converting back and forth from base-10 to base 2^32 or whatever is slow.
+Base-10 would have an insane amount of carries. Maybe I can use a power of 10 radix, should mean easy access to my digits right?
+
+Another likely bottleneck: using strings to reverse the digits.
+Surely I can just add them in reverse order? (assuming the radix problem was cool...)
+I don't know much x86 assembler, hopefully I won't need it.
+
+Parallelization: I got OpenMP working, this problem turns out to be embarrassingly parallel.
+Maybe I should distribute this as well? MPI? I don't know the architecture of the supercomputer here.
