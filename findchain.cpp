@@ -2,26 +2,33 @@
 #include <stdio.h>
 #include <iostream>
 #include <algorithm>
+#include <omp.h>
+
+
+#define STEP_LIMIT 330
 
 int main(int argc, char* argv[]) {
-    mpz_class x = 0, y, steps = 0;
+    mpz_class x = 0, y, steps = 0,init;
     
+    init.set_str(argv[1],10);
 
-    for (mpz_class i = 0; i < 1e9; i++) {
-        x.set_str(argv[1],10);
-        std::string x_str = argv[1];
+    #pragma omp parallel for
+    for (int i=0; i<1000000; i++) {
+        x = i+init;
+        std::string x_str = x.get_str();
         std::reverse(x_str.begin(), x_str.end());
+        steps = 0;
         while (true) {
             y.set_str(x_str,10);
             if (x == y) break;
-            std::cout<<x<<","<<steps<<std::endl;
+            // std::cout<<x<<","<<steps<<std::endl;
             x += y;
-            if (steps > 330) break;
+            if (steps > STEP_LIMIT) break;
             steps++;
             x_str = x.get_str();
             std::reverse(x_str.begin(), x_str.end());
         }
-        if (steps>200) std::cout<<x<<","<<steps<<std::endl;
+        if (steps<STEP_LIMIT+1 && steps>50) std::cout<<i<<","<<steps<<std::endl;
     }
 
     return 0;
