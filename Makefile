@@ -1,7 +1,7 @@
 CC=g++
 DEBUG=-g
-CFLAGS=-c -Wall -L/usr/local/lib -fopenmp -lgmpxx -lgmp $(DEBUG)
-LFLAGS= -Wall -L/usr/local/lib -fopenmp -lgmpxx -lgmp $(DEBUG)
+CFLAGS=-c -O2 -Wall -L/usr/local/lib -fopenmp -lgmpxx -lgmp $(DEBUG)
+LFLAGS= -O2 -Wall -L/usr/local/lib -fopenmp -lgmpxx -lgmp $(DEBUG)
 OBJS= findchain.o 
 
 all: $(OBJS)
