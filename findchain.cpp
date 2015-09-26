@@ -15,15 +15,16 @@ class bigint {
     radix_t radix;
   public:
     bigint(unsigned long long,radix_t);
-    bigint& operator+=(bigint&);
-    bigint& operator^(bigint&);
+    bigint& operator+=(bigint&); // normal additon
+    bigint& operator++(); // base-10-digit-reversed addition
     operator std::string() const {
         std::stringstream base10digits;
-        for (int i=digits.size();i>0;i--) {
-            base10digits << digits[i];
+        for (int i=digits.size()-1;i>=0;i--) {
+            base10digits << (int)digits[i];
         }
         return base10digits.str();
     }
+    bool ispalindrome();
 };
 
 bigint::bigint(unsigned long long i, radix_t r) : radix(r) { // I'll not hardcode radix to 10 for now...
@@ -35,23 +36,37 @@ bigint::bigint(unsigned long long i, radix_t r) : radix(r) { // I'll not hardcod
     // these will end up LSD first, MSD last
 }
 
-bigint& bigint::operator+=(bigint& other) { // normal addition
+bigint& bigint::operator++() { // reverse and add-to-self addition
     unsigned carry = 0,dig;
-    for (size_t i=0; i<digits.size();i++) {
-        dig = digits[i]+other.digits[i]+carry;
-        digits[i] = dig%radix;
+    size_t len = digits.size();
+    std::vector<radix_t> result; result.resize(len);
+
+    for (size_t i=0; i<len ;i++) {
+        dig = digits[i]+digits[len-1-i]+carry;
+        result[i] = dig%radix;
         carry = dig/radix;
     }
+    if (carry !=0) {
+       result.push_back((radix_t)carry);
+    }
+    digits = result;
     return *this;
+}
+
+bool bigint::is_palindrome() {
+    size_t len = digits.size();
+    for (size_t i=0; i = len/2+1; i++) {
+        if (digits[i]!=digits[len-1-i]) return false;
+    }
+    return true;
 }
 
 
 int main(int argc, char* argv[]) {
     
-    bigint a(100,10);
-    bigint b(300,10);
+    bigint a(430,10);
 
-    std::cout<<std::string(a+=b)<<std::endl;
+    std::cout<<std::string(++a)<<std::endl;
     
     /*
     mpz_class x = 0, y, steps = 0,init;
