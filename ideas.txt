@@ -11,3 +11,9 @@ I don't know much x86 assembler, hopefully I won't need it.
 
 Parallelization: I got OpenMP working, this problem turns out to be embarrassingly parallel.
 Maybe I should distribute this as well? MPI? I don't know the architecture of the supercomputer here.
+
+
+Update: I rolled some bigint code, seems to get about 1.3x the performance of GMP. Mostly from avoiding strings I would guess.
+Which is okay, maybe I can get it faster. It's in base-10 radix, so the number of carries can be greatly reduced by upping that.
+I didn't code in any operations other than self-reverse-addition and addition to an assumedly-small int with fewer digits
+    than the bigint.
