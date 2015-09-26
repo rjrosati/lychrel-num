@@ -1,7 +1,9 @@
 //#include <gmpxx.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 #include <sstream>
+#include <string>
 #include <omp.h>
 #include <vector>
 
@@ -24,7 +26,9 @@ class bigint {
         }
         return base10digits.str();
     }
-    bool ispalindrome();
+    bigint& operator=(bigint&);
+    bigint operator+(int);
+    bool is_palindrome();
 };
 
 bigint::bigint(unsigned long long i, radix_t r) : radix(r) { // I'll not hardcode radix to 10 for now...
@@ -53,9 +57,31 @@ bigint& bigint::operator++() { // reverse and add-to-self addition
     return *this;
 }
 
+bigint& bigint::operator=(bigint& other) {
+    digits = other.digits;
+    return *this;
+}
+
+bigint bigint::operator+(int num) { // assumes num < bigint
+    unsigned carry = 0,dig;
+    size_t len = digits.size();
+    bigint result(num,radix);
+    result.digits.resize(len);
+
+    for (size_t i=0; i<len ;i++) {
+        dig = digits[i]+result.digits[i]+carry;
+        result.digits[i] = dig%radix;
+        carry = dig/radix;
+    }
+    if (carry !=0) {
+       result.digits.push_back((radix_t)carry);
+    }
+    return result;
+}
+
 bool bigint::is_palindrome() {
     size_t len = digits.size();
-    for (size_t i=0; i = len/2+1; i++) {
+    for (size_t i=0; i < len/2+1; i++) {
         if (digits[i]!=digits[len-1-i]) return false;
     }
     return true;
@@ -64,33 +90,20 @@ bool bigint::is_palindrome() {
 
 int main(int argc, char* argv[]) {
     
-    bigint a(430,10);
+    bigint init(atoi(argv[1]),10);
+    int steps = 0;
 
-    std::cout<<std::string(++a)<<std::endl;
-    
-    /*
-    mpz_class x = 0, y, steps = 0,init;
-    
-    init.set_str(argv[1],10);
-
-    #pragma omp parallel for shared(init) private(x,y,steps)
-    for (int i=0; i<1000000; i++) {
-        x = i+init;
-        std::string x_str = x.get_str();
-        std::reverse(x_str.begin(), x_str.end());
+    for (int i=0; i<100; i++) {
+        bigint x = init+i;
         steps = 0;
         while (true) {
-            y.set_str(x_str,10);
-            if (x == y) break;
-            // std::cout<<x<<","<<steps<<std::endl;
-            x += y;
+            if (x.is_palindrome()) break;
+            ++x; // go deeper, reverse add self
             if (steps > STEP_LIMIT) break;
             steps++;
-            x_str = x.get_str();
-            std::reverse(x_str.begin(), x_str.end());
         }
-        if (steps<STEP_LIMIT+1 && steps>100) std::cout<<i+init<<","<<steps<<std::endl;
+        if (steps<STEP_LIMIT+1 && steps > 10) std::cout<<std::string(init+i)<<","<<steps<<","<<std::string(x)<<std::endl;
     }
-    */
+    
     return 0;
 }
