@@ -93,7 +93,8 @@ int main(int argc, char* argv[]) {
     bigint init(atoi(argv[1]),10);
     int steps = 0;
 
-    for (int i=0; i<100; i++) {
+    #pragma omp parallel for shared(init) private(steps)
+    for (int i=0; i<1000000; i++) {
         bigint x = init+i;
         steps = 0;
         while (true) {
@@ -102,7 +103,7 @@ int main(int argc, char* argv[]) {
             if (steps > STEP_LIMIT) break;
             steps++;
         }
-        if (steps<STEP_LIMIT+1 && steps > 10) std::cout<<std::string(init+i)<<","<<steps<<","<<std::string(x)<<std::endl;
+        if (steps<STEP_LIMIT+1 && steps > 100) std::cout<<std::string(init+i)<<","<<steps<<","<<std::string(x)<<std::endl;
     }
     
     return 0;
