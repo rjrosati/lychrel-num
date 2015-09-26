@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
     
     init.set_str(argv[1],10);
 
-    #pragma omp parallel for shared(init) private(x,y,steps)
+   #pragma omp parallel for shared(init) private(x,y,steps)
     for (int i=0; i<1000000; i++) {
         x = i+init;
         std::string x_str = x.get_str();
@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
             x_str = x.get_str();
             std::reverse(x_str.begin(), x_str.end());
         }
-        if (steps<STEP_LIMIT+1 && steps>100) std::cout<<i+init<<","<<steps<<std::endl;
+        if (steps<STEP_LIMIT+1 && steps>100) std::cout<<i+init<<","<<steps<<","<<x_str<<std::endl;
     }
 
     return 0;
