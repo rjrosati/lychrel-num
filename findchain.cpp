@@ -39,7 +39,6 @@ bigint::bigint(unsigned long long i, radix_t r) : radix(r) { // I'll not hardcod
     }
     // these will end up LSD first, MSD last
 }
-
 bigint& bigint::operator++() { // reverse and add-to-self addition
     unsigned carry = 0,dig;
     size_t len = digits.size();
@@ -90,7 +89,7 @@ bool bigint::is_palindrome() {
 
 int main(int argc, char* argv[]) {
     
-    bigint init(atoi(argv[1]),10);
+    bigint init(std::stoull(argv[1]),10);
     int steps = 0;
 
     #pragma omp parallel for shared(init) private(steps)
