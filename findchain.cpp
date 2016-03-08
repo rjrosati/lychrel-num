@@ -7,7 +7,7 @@
 #include <omp.h>
 #include <vector>
 
-#define STEP_LIMIT 270 
+#define STEP_LIMIT 290 
 
 typedef unsigned char radix_t; // should be smaller than unsigned int
 
