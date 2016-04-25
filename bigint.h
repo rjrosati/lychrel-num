@@ -14,8 +14,9 @@ class bigint {
     bigint& operator+=(bigint&); // normal additon
     bigint& operator++(); // base-10-digit-reversed addition
     operator std::string() const;
-    bigint& operator=(bigint);
-    bigint operator+(int);
+    bigint& operator=(const bigint&);
+    bigint operator+(const int);
+    bigint operator+(const bigint&);
     bool is_palindrome();
 };
 #endif

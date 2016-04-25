@@ -40,19 +40,29 @@ bigint& bigint::operator=(bigint other) {
 }
 
 bigint bigint::operator+(int num) {
-    radix_t carry = 0,dig;
-    size_t len = digits.size();
-    bigint result(num,radix);
-    result.digits.resize(len);
+    bigint result = bigint(num,radix);
+    return *this+result;
+}
 
-    for (size_t i=0; i<len ;i++) {
-        dig = digits[i]+result.digits[i]+carry;
+bigint bigint::operator+(const bigint& other) {
+    bigint big   = digits.size() > other.digits.size() ? *this : other;
+    bigint small = digits.size() > other.digits.size() ? other : *this;
+    bigint result = big;
+
+    radix_t dig,carry = 0;
+    for (size_t i=0; i<small.digits.size();i++) {
+        dig = big.digits[i] + small.digits[i]+carry;
         result.digits[i] = dig%radix;
         carry = dig/radix;
     }
-    if (carry !=0) {
-       result.digits.push_back(carry);
+    size_t j = small.digits.size();
+    while (carry != 0) {
+        dig = big.digits[j] + carry;
+        result.digits[j] = dig%radix;
+        carry = dig/radix;
+        j++;
     }
+    // rest of result's digits are already big's
     return result;
 }
 
