@@ -28,7 +28,7 @@ bigint& bigint::operator++() { // reverse and add-to-self addition
         carry = dig/radix;
     }
     if (carry !=0) {
-       result.push_back(carry);
+        result.push_back(carry);
     }
     digits = result;
     return *this;
@@ -45,24 +45,27 @@ bigint bigint::operator+(int num) {
 }
 
 bigint bigint::operator+(const bigint& other) {
-    bigint big   = digits.size() > other.digits.size() ? *this : other;
-    bigint small = digits.size() > other.digits.size() ? other : *this;
-    bigint result = big;
+    const bigint *big   = digits.size() > other.digits.size() ? this : &other;
+    const bigint *small = digits.size() > other.digits.size() ? &other : this;
+    bigint result = *big;
 
     radix_t dig,carry = 0;
-    for (size_t i=0; i<small.digits.size();i++) {
-        dig = big.digits[i] + small.digits[i]+carry;
+    for (size_t i=0; i<small->digits.size();i++) {
+        dig = big->digits[i] + small->digits[i]+carry;
         result.digits[i] = dig%radix;
         carry = dig/radix;
     }
-    size_t j = small.digits.size();
-    while (carry != 0) {
-        dig = big.digits[j] + carry;
+    for (size_t j = small->digits.size(); j < big->digits.size(); j++) {
+        dig = big->digits[j] + carry;
         result.digits[j] = dig%radix;
         carry = dig/radix;
-        j++;
+        if (carry == 0)
+            break;
+        // rest of result's digits are already big's
     }
-    // rest of result's digits are already big's
+    if (carry != 0)
+        result.digits.push_back(carry);
+
     return result;
 }
 

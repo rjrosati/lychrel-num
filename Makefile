@@ -1,7 +1,8 @@
 CC=mpic++
 DEBUG=-g
-CFLAGS=-c -O3 -std=c++11 -Wall -L/usr/local/lib -fopenmp -lgmpxx -lgmp $(DEBUG)
-LFLAGS= -O3 -std=c++11 -Wall -L/usr/local/lib -fopenmp -lgmpxx -lgmp $(DEBUG)
+OPT=-O3 -ffast-math
+CFLAGS=-c $(OPT) -std=c++11 -Wall -L/usr/local/lib -fopenmp $(DEBUG)
+LFLAGS= $(OPT) -std=c++11 -Wall -L/usr/local/lib -fopenmp $(DEBUG)
 OBJS= findchain.o bigint.o
 
 all: $(OBJS)
@@ -15,5 +16,5 @@ findchain.o: findchain.cpp bigint.h
 bigint.o: bigint.cpp bigint.h
 
 clean:
-	rm findchain $(OBJS)
-	rm .*.swp
+	rm -f findchain $(OBJS)
+	rm -f .*.swp

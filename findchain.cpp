@@ -9,9 +9,9 @@
 #include "bigint.h"
 
 #define STEP_LIMIT 390 
-#define PRINT_LIMIT 80
+#define PRINT_LIMIT 100
 
-#define NUMS_PER_NODE (int)1e6
+#define NUMS_PER_NODE (int)1e9
 
 int main(int argc, char* argv[]) {
     MPI_Init(&argc,&argv);
