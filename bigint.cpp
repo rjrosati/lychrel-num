@@ -34,7 +34,7 @@ bigint& bigint::operator++() { // reverse and add-to-self addition
     return *this;
 }
 
-bigint& bigint::operator=(bigint& other) {
+bigint& bigint::operator=(bigint other) {
     digits = other.digits;
     return *this;
 }
