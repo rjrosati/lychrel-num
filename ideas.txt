@@ -17,3 +17,10 @@ Update: I rolled some bigint code, seems to get about 1.3x the performance of GM
 Which is okay, maybe I can get it faster. It's in base-10 radix, so the number of carries can be greatly reduced by upping that.
 I didn't code in any operations other than self-reverse-addition and addition to an assumedly-small int with fewer digits
     than the bigint.
+
+
+Apr 25 2016
+MPI working
+see codes here: http://www.p196.org/ben-mirror/ben-mirror.html , see if there are any good ideas?
+need to optimize before putting on supercomputer
+I don't know enough assembler to understand half the codes on that site. Here's hoping -O3 is as good as they are.
