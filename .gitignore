@@ -1,2 +1,4 @@
 findchain
 *.o
+*.out
+*.err
