@@ -24,3 +24,7 @@ MPI working
 see codes here: http://www.p196.org/ben-mirror/ben-mirror.html , see if there are any good ideas?
 need to optimize before putting on supercomputer
 I don't know enough assembler to understand half the codes on that site. Here's hoping -O3 is as good as they are.
+
+Apr 28 2016
+I came across a blog post claiming all 20-digit numbers have been checked and failed to yield a more delayed palindrome than the old 261-iteration-er. (http://datagenetics.com/blog/october12015/index.html)
+With this in mind, I'll try to search in the 21 digit range. Although, as this blog has made me aware, these numbers are becoming more and more likely to be Lychrel as they get bigger.
