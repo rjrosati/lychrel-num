@@ -27,4 +27,35 @@ I don't know enough assembler to understand half the codes on that site. Here's 
 
 Apr 28 2016
 I came across a blog post claiming all 20-digit numbers have been checked and failed to yield a more delayed palindrome than the old 261-iteration-er. (http://datagenetics.com/blog/october12015/index.html)
+
 With this in mind, I'll try to search in the 21 digit range. Although, as this blog has made me aware, these numbers are becoming more and more likely to be Lychrel as they get bigger.
+
+3 May 2016
+Got a couple ideas for optimization from reading http://jasondoucette.org/worldrecords and talking to Victor Eijkhout.
+Basically, we can eliminate a huge chunk of parameter space by identifying numbers that converge to the same change.
+Consider a number with the following leading and trailing digits:
+567...180
+Then reverse-add it as normal:
+ 567...180
++081...765
+----------
+ 648...945 
+
+But this number isn't uniquely the self-reversed sum of 567...180, we can increment and decrement digits symmetrically and maintain the same sum:
+ 467...181
++181...764
+----------
+ 648...945
+
+For a d-digit number, we'll have floor(d/2) digit pairs to work with.
+For each digit pair, (p,q), we'll have two-digit partitions of (p+q) options that generate the same digit and carry.
+Also note leading zeros are invalid.
+Wikipedia gives the number of partitions into one or two terms is floor(n/2+1). n = p+q = 0,1,...,18 for base-10 digits
+
+So, assuming the digits are random enough, we'd get floor(avgn/2+1)**floor(d/2) ~ floor(9/2+1)**floor(21/2) = 5**10.
+Wow, is that right?
+
+Similarly there might modifications that will hit the same rev-add chain starting at the second iteration.
+But that sounds more complicated.
+
+Victor also mentioned maybe doing something like a carry lookahead in an ALU. That sounds difficult in base 10 but hey it's an option.
