@@ -11,7 +11,7 @@
 #define STEP_LIMIT 290 
 #define PRINT_LIMIT 150
 
-#define NUMS_PER_NODE (int)1e9
+#define NUMS_PER_NODE (int)1e7
 
 int main(int argc, char* argv[]) {
     int provided;
@@ -39,29 +39,37 @@ int main(int argc, char* argv[]) {
         std::cout<<mysize<<" nodes"<<std::endl;
         std::cout<<omp_get_max_threads()<<" threads each"<<std::endl;
     }
-    int steps=0,steptimer=0;
-    double tic=0,toc=0;
 
-    #pragma omp parallel for shared(myinit) firstprivate(tic,toc,steps,steptimer) schedule(dynamic,NUMS_PER_NODE/1000)
-    for (int i=0; i<NUMS_PER_NODE; i++) {
-        if (i%10000000 == 0) {
-            tic = omp_get_wtime();
-            steptimer = 0;
-        }
-        bigint x = myinit+i;
-        steps = 0;
-        while (true) {
-            if (x.is_palindrome()) break;
-            ++x; // go deeper, reverse add self
-            if (steps > STEP_LIMIT) break;
-            steps++;
-        }
-        if (steps<STEP_LIMIT+1 && steps > PRINT_LIMIT) std::cout<<std::string(myinit+i)<<","<<steps<<","<<std::string(x)<<std::endl;
-        steptimer+=steps;
-        if (i%10000000 == 99999) {
-            toc = omp_get_wtime();
-            std::cout<<steptimer/(toc-tic)<<" radds/sec"<<std::endl;
-            steptimer = 0;
+    #pragma omp parallel shared(myinit) 
+    {
+        int steps=0;
+        #ifndef QUIET
+        int steptimer=0;
+        double tic=0,toc=0;
+        #endif
+        #pragma omp for schedule(dynamic,NUMS_PER_NODE/1000)
+        for (int i=0; i<NUMS_PER_NODE; i++) {
+            bigint x = myinit+i;
+            steps = 0;
+            while (true) {
+                if (x.is_palindrome()) break;
+                ++x; // go deeper, reverse add self
+                if (steps > STEP_LIMIT) break;
+                steps++;
+            }
+            if (steps<STEP_LIMIT+1 && steps > PRINT_LIMIT) std::cout<<std::string(myinit+i)<<","<<steps<<","<<std::string(x)<<std::endl;
+
+            #ifndef QUIET
+            steptimer+=steps;
+            if (i%100000 == 0) {
+                tic = omp_get_wtime();
+                steptimer = 0;
+            } else if (i%100000 == 99999) {
+                toc = omp_get_wtime();
+                std::cout<<steptimer/(toc-tic)<<" radds/sec"<<std::endl;
+                steptimer = 0;
+            }
+            #endif
         }
     }
 
