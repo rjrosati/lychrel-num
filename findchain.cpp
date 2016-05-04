@@ -8,7 +8,7 @@
 
 #include "bigint.h"
 
-#define STEP_LIMIT 290 
+#define STEP_LIMIT 310 
 #define PRINT_LIMIT 150
 
 #define NUMS_PER_NODE (int)1e7
@@ -47,6 +47,7 @@ int main(int argc, char* argv[]) {
         int steptimer=0;
         double tic=0,toc=0;
         #endif
+
         #pragma omp for schedule(dynamic,NUMS_PER_NODE/1000)
         for (int i=0; i<NUMS_PER_NODE; i++) {
             bigint x = myinit+i;
