@@ -1,4 +1,7 @@
+.*.swp
 findchain
 *.o
 *.out
 *.err
+*.s
+*.lst
