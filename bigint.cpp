@@ -4,7 +4,7 @@
 bigint::operator std::string() const {
     std::stringstream base10digits;
     for (int i=digits.size()-1;i>=0;i--) {
-        base10digits << (int)digits[i];
+        base10digits <<(int)digits[i];
     }
     return base10digits.str();
 }
@@ -33,6 +33,11 @@ bigint& bigint::operator++() { // reverse and add-to-self addition
     digits = result;
     return *this;
 }
+void bigint::remove_leading_zero() {
+    if (digits[digits.size()-1] == 0 ) {
+        digits.erase(digits.end() - 1);
+    }
+}
 
 void bigint::resolve_carries() {
     // sometimes I might want to improperly set a digit > radix for convenience
@@ -41,6 +46,7 @@ void bigint::resolve_carries() {
     for (size_t i=0; i<digits.size(); i++) {
         digits[i] += carry;
         carry = digits[i]/radix;
+        digits[i] %= radix;
     }
     while (carry != 0) {
         digits.push_back(carry%radix);
