@@ -32,7 +32,7 @@ With this in mind, I'll try to search in the 21 digit range. Although, as this b
 
 3 May 2016
 Got a couple ideas for optimization from reading http://jasondoucette.org/worldrecords and talking to Victor Eijkhout.
-Basically, we can eliminate a huge chunk of parameter space by identifying numbers that converge to the same change.
+Basically, we can eliminate a huge chunk of parameter space by identifying numbers that converge to the same chain.
 Consider a number with the following leading and trailing digits:
 567...180
 Then reverse-add it as normal:
@@ -59,3 +59,16 @@ Similarly there might modifications that will hit the same rev-add chain startin
 But that sounds more complicated.
 
 Victor also mentioned maybe doing something like a carry lookahead in an ALU. That sounds difficult in base 10 but hey it's an option.
+
+9 May 2016
+I got an email from Jason Doucette today. He kindly described the algorithm for taking advantage of first-order consequences (the converging chains that I described above).
+Paraphrasing, the idea is not to test the countable numbers, but to test their possible sums after one iteration.
+I'd generate:
+abcd.....dcba for even-d numbers, and
+abcd..A..dcba for odd-d numbers,
+where a,b,c,d,etc are the possible sums of two digits [0,18], and A,B,C are the possible sums of a single digit [0,9]*2.
+Some carry propagation might be necessary, but then I could start reverse-adding first iterations, getting the speedup factor described above.
+Something similar could probably done (with significantly more effort) to generate higher-order consequences directly.
+
+Jason also mentioned that writing at least the core reverse addition code in assembly to be a good idea. Compilers are pretty good at using obscure and efficient instructions, but this code is simple enough that direct assembler might be better.
+If I implement something like a carry-lookahead, then assembly is probably the way to go there.
