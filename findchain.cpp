@@ -10,7 +10,7 @@
 #include "bigint.h"
 
 #define STEP_LIMIT 310 
-#define PRINT_LIMIT 150
+#define PRINT_LIMIT 100
 
 #define RADIX 10
 
@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     int myrank,mysize;
     MPI_Comm_rank(MPI_COMM_WORLD,&myrank);
     MPI_Comm_size(MPI_COMM_WORLD,&mysize);
-    omp_set_num_threads(1);//omp_get_num_procs());
+    omp_set_num_threads(omp_get_num_procs());
 
     if (myrank==0) {
         if (argc != 2) {
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
         double tic=0,toc=0;
         #endif
 
-        #pragma omp for schedule(dynamic,(maxseed-minseed)/1000)
+        #pragma omp for schedule(dynamic,10000)
         for (ull seed=minseed; seed<maxseed; seed++) {
             bigint x = gen_foc(d,seed); 
             steps = 0;
@@ -95,6 +95,7 @@ int main(int argc, char* argv[]) {
                 steptimer = 0;
             }
             #endif
+            
         }
     }
 
