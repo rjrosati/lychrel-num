@@ -18,5 +18,6 @@ class bigint {
     bigint operator+(const int);
     bigint operator+(const bigint&);
     bool is_palindrome();
+    void resolve_carries();
 };
 #endif

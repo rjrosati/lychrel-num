@@ -12,6 +12,21 @@
 #define PRINT_LIMIT 150
 
 #define NUMS_PER_NODE (int)1e7
+#define RADIX 10
+
+bigint gen_foc(int d, int seed) { // first-order consequence
+    bigint i(0,RADIX); i.digits.reserve(d);
+    for (int j=0;j<d/2;j++) {
+        i.digits.push_back(seed%(2*RADIX-1));
+        seed /= (2*RADIX-1);
+    }
+    if (d%2 == 1) i.digits.push_back((seed%RADIX)*2);
+    for (int j=d/2;j>0;j--) {
+        i.digits.push_back(i.digits[j]);
+    }
+    i.resolve_carries();
+    return i;
+}
 
 int main(int argc, char* argv[]) {
     int provided;
@@ -29,7 +44,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    bigint myinit(std::stoull(argv[1]),10);
+    bigint myinit(std::stoull(argv[1]),RADIX);
 
     myinit = myinit + myrank*NUMS_PER_NODE; // so we'll cover mysize*NUMS_PER_NODE numbers in total
     if (myrank == 0) {

@@ -34,6 +34,20 @@ bigint& bigint::operator++() { // reverse and add-to-self addition
     return *this;
 }
 
+void bigint::resolve_carries() {
+    // sometimes I might want to improperly set a digit > radix for convenience
+    // this function will resolve these pending carries
+    radix_t carry=0;
+    for (size_t i=0; i<digits.size(); i++) {
+        digits[i] += carry;
+        carry = digits[i]/radix;
+    }
+    while (carry != 0) {
+        digits.push_back(carry%radix);
+        carry /= radix;
+    } // just in case I need more than one extra digit.
+}
+
 bigint& bigint::operator=(const bigint& other) {
     digits = other.digits;
     return *this;
