@@ -1,6 +1,6 @@
 CC=mpic++
 DEBUG=-g
-OPT= -DQUIET
+OPT= -DQUIET -O3 -ffast-math
 CFLAGS=-c $(OPT) -std=c++11 -Wall -L/usr/local/lib -fopenmp $(DEBUG)
 LFLAGS= $(OPT) -std=c++11 -Wall -L/usr/local/lib -fopenmp $(DEBUG)
 OBJS= findchain.o bigint.o

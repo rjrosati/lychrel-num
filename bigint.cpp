@@ -1,5 +1,7 @@
 #include "bigint.h"
 #include <sstream>
+constexpr radix_t bigint::m10[20];
+constexpr radix_t bigint::q10[20];
 
 bigint::operator std::string() const {
     std::stringstream base10digits;
@@ -18,14 +20,14 @@ bigint::bigint(unsigned long long i, radix_t r) : radix(r) { // I'll not hardcod
     // these will end up LSD first, MSD last
 }
 bigint& bigint::operator++() { // reverse and add-to-self addition
-    radix_t carry = 0,dig;
+    register radix_t carry = 0,dig;
     size_t len = digits.size();
     std::vector<radix_t> result; result.resize(len);
 
     for (size_t i=0; i<len ;i++) {
         dig = digits[i]+digits[len-1-i]+carry;
-        result[i] = dig%radix;
-        carry = dig/radix;
+        result[i] = m10[dig];
+        carry = q10[dig]; // mod and divide by 10 are lookup operations now
     }
     if (carry !=0) {
         result.push_back(carry);

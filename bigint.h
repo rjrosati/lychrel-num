@@ -8,6 +8,8 @@ typedef unsigned char radix_t; // should be smaller than unsigned int
 class bigint {
   private:
     radix_t radix;
+    constexpr static radix_t m10[20] = {0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9};
+    constexpr static radix_t q10[20] = {0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1};
   public:
     std::vector<radix_t> digits;
     bigint(unsigned long long,radix_t);
