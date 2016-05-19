@@ -36,11 +36,11 @@ bigint gen_foc(int d, ull seed) {
 int main(int argc, char* argv[]) {
     int provided;
     MPI_Init_thread(&argc,&argv,MPI_THREAD_FUNNELED,&provided); // master must make all MPI calls
-    if (provided != MPI_THREAD_FUNNELED) MPI_Abort(MPI_COMM_WORLD,-2);
+    if (provided < MPI_THREAD_FUNNELED) MPI_Abort(MPI_COMM_WORLD,-2);
     int myrank,mysize;
     MPI_Comm_rank(MPI_COMM_WORLD,&myrank);
     MPI_Comm_size(MPI_COMM_WORLD,&mysize);
-    omp_set_num_threads(1);//omp_get_num_procs());
+    omp_set_num_threads(omp_get_num_procs());
 
     if (myrank==0) {
         if (argc != 2) {
