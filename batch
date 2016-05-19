@@ -2,10 +2,10 @@
 
 #SBATCH -J pcse2016lychrel
 #SBATCH -A PCSE-2016 
-#SBATCH -n 2
-#SBATCH --ntasks-per-node=1
+#SBATCH -n 32
+#SBATCH --ntasks-per-node=16
 #SBATCH -p normal
-#SBATCH -t 01:00:00 
+#SBATCH -t 00:15:00 
 #SBATCH --error=lychrel%J.err
 #SBATCH --output=lychrel%J.out
 
@@ -14,6 +14,5 @@ echo "running on hosts: $SLURM_NODELIST"
 echo "running on $SLURM_NODES nodes"
 echo "running on $SLURM_NPROCS procs"
 echo "working dir: `pwd`"
-ibrun ./findchain 100000000000000000000
-# note that is is 21 digits long
+ibrun ./findchain 12
 echo "program completed. exit code: $? at: `date`"

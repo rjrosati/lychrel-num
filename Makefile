@@ -9,7 +9,8 @@ OBJS= findchain.o bigint.o
 all: $(OBJS)
 	$(CC) $(OBJS) -o findchain $(LFLAGS)
 
-icc: OPT=-O3 -fp-model fast
+icc: OPT=-O3 -fp-model fast -ipo -DQUIET -DNO_MPI_THREADS
+icc: LFLAGS= $(OPT) -std=c++11 -Wall -L/usr/local/lib -openmp -lmpi $(DEBUG)
 icc: $(OBJS)
 	$(CC) $(OBJS) -o findchain $(LFLAGS)
 
