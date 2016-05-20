@@ -72,3 +72,7 @@ Something similar could probably done (with significantly more effort) to genera
 
 Jason also mentioned that writing at least the core reverse addition code in assembly to be a good idea. Compilers are pretty good at using obscure and efficient instructions, but this code is simple enough that direct assembler might be better.
 If I implement something like a carry-lookahead, then assembly is probably the way to go there.
+
+20 May 2016
+I've been toying with assembly code and got some basic revadd code... maybe I can use vpaddb and cousins to vectorize these additions?
+I still don't know how to do the vector.push_back part
