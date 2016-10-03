@@ -77,10 +77,3 @@ bigint bigint::operator+(const bigint& other) {
 }
 
 
-bool bigint::is_palindrome() {
-    size_t len = digits.size();
-    for (size_t i=0; i < len/2+1; i++) {
-        if (digits[i]!=digits[len-1-i]) return false;
-    }
-    return true;
-}

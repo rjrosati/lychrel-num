@@ -20,6 +20,7 @@ typedef unsigned long long ull;
 // The idea here is to start at the first iteration of reversal-addition, rather than
 //     the zeroth. This should eliminate seeds that converge to the same chain.
 //     I expect a reduction in cases of ~5^10 for 21-digit ints. 
+//     note to self: explain the algorithm, paste in the email from Jason Doucette
 //     It would be awesome if I could figure out how to create higher-order consequences.
 bigint gen_foc(int d, ull seed) { 
     bigint i(0,RADIX); i.digits.reserve(d);
@@ -79,13 +80,12 @@ int main(int argc, char* argv[]) {
     {
         int steps=0;
         #ifndef QUIET
-        int numcases = 0;
         int steptimer=0;
         double tic=0,toc=0;
         #endif
 	
 	#ifndef NO_MPI_THREADS
-        #pragma omp for schedule(dynamic,10000)
+        #pragma omp for schedule(dynamic,10000) 
 	#endif
         for (ull seed=minseed; seed<maxseed; seed++) {
             bigint x = gen_foc(d,seed); 
@@ -98,14 +98,17 @@ int main(int argc, char* argv[]) {
                 // could modify this to find smallest initial int and print that out.
 
             #ifndef QUIET
-            steptimer+=steps;
-            if (i%100000 == 0) {
-                tic = omp_get_wtime();
-                steptimer = 0;
-            } else if (i%100000 == 99999) {
-                toc = omp_get_wtime();
-                std::cout<<steptimer/(toc-tic)<<" radds/sec"<<std::endl;
-                steptimer = 0;
+            #pragma omp critical
+            {
+                steptimer+=steps;
+                if (steptimer%100000 == 0) {
+                    tic = omp_get_wtime();
+                    steptimer = 0;
+                } else if (steptimer%100000 == 50000) {
+                    toc = omp_get_wtime();
+                    std::cout<<steptimer/(toc-tic)<<" radds/sec"<<std::endl;
+                    steptimer = 0;
+                }
             }
             #endif
             

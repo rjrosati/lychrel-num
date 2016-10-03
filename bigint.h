@@ -27,7 +27,7 @@ class bigint {
     void remove_leading_zero();
 };
 
-// apparently this has to go in the header file
+// apparently inline functions need to go in the header file
 inline void bigint::revadd() { // reverse and add-to-self addition
     register radix_t carry = 0,dig;
     size_t len = digits.size();
@@ -42,6 +42,14 @@ inline void bigint::revadd() { // reverse and add-to-self addition
         tmp.push_back(carry);
     }
     digits = tmp;
+}
+
+inline bool bigint::is_palindrome() {
+    size_t len = digits.size();
+    for (size_t i=0; i < len/2+1; i++) {
+        if (digits[i]!=digits[len-1-i]) return false;
+    }
+    return true;
 }
 
 #endif
