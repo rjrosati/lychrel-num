@@ -76,3 +76,10 @@ If I implement something like a carry-lookahead, then assembly is probably the w
 20 May 2016
 I've been toying with assembly code and got some basic revadd code... maybe I can use vpaddb and cousins to vectorize these additions?
 I still don't know how to do the vector.push_back part
+
+03 Oct 2016
+I took a bit of a break on this project over the summer. I doubt I'm going to have much time in the next couple months, qualifying exams are coming up.
+Anyway, I had an idea about generating kth-order consequences. Basically, I'll temporarily use a larger base.
+Staying in base-10 would require a lot of carries, but in base 2*radix-1, I'm guaranteed never to carry.
+
+I need to think about this some more, I'm not convinced it'll work yet.
