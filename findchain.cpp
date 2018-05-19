@@ -4,11 +4,9 @@
 #include <math.h>
 #include <iostream>
 #include <sstream>
-#include "mpi.h"
+//#include "mpi.h"
 
-#ifndef NO_MPI_THREADS
 #include <omp.h>
-#endif
 
 #include "bigint.h"
 
@@ -38,23 +36,15 @@ bigint gen_foc(int d, ull seed) {
 }
 
 int main(int argc, char* argv[]) {
-    int provided;
-    provided = MPI::Init_thread(MPI_THREAD_FUNNELED); // master must make all MPI calls
-    #ifndef NO_MPI_THREADS
-    if (provided == MPI_THREAD_SINGLE) MPI_Abort(MPI_COMM_WORLD,-2);
     omp_set_num_threads(omp_get_num_procs());
-    #endif
-    int myrank,mysize;
-    MPI_Comm_rank(MPI_COMM_WORLD,&myrank);
-    MPI_Comm_size(MPI_COMM_WORLD,&mysize);
 
-    if (myrank==0) {
-        if (argc != 2) {
-            std::cout<<"Usage:"<<std::endl
-                <<"\t./findchain [number of digits to search]"<<std::endl;
-            MPI_Abort(MPI_COMM_WORLD,-1);
-        }
+    if (argc != 2) {
+        std::cout<<"Usage:"<<std::endl
+            <<"\t./findchain [number of digits to search]"<<std::endl;
+        std::exit(0);
     }
+    int myrank = 0;
+    int mysize = 1;
 
     int d = std::stoi(argv[1]);
     ull nums = 0;
@@ -70,13 +60,9 @@ int main(int argc, char* argv[]) {
         std::cout<<"checking for palindromic sequences shorter than "<<STEP_LIMIT<<" steps"<<std::endl;
         std::cout<<"will print if more than "<<PRINT_LIMIT<<" steps"<<std::endl;
         std::cout<<mysize<<" nodes"<<std::endl;
-	#ifndef NO_MPI_THREADS
         std::cout<<omp_get_max_threads()<<" threads each"<<std::endl;
-	#endif
     }
-    #ifndef NO_MPI_THREADS
     #pragma omp parallel shared(minseed,maxseed) 
-    #endif
     {
         int steps=0;
         #ifndef QUIET
@@ -84,9 +70,7 @@ int main(int argc, char* argv[]) {
         double tic=0,toc=0;
         #endif
 	
-	#ifndef NO_MPI_THREADS
         #pragma omp for schedule(dynamic,10000) 
-	#endif
         for (ull seed=minseed; seed<maxseed; seed++) {
             bigint x = gen_foc(d,seed); 
             for (steps=0;steps <= STEP_LIMIT;steps++) {
@@ -114,8 +98,6 @@ int main(int argc, char* argv[]) {
             
         }
     }
-
-    MPI_Finalize();
     
     return 0;
 }
